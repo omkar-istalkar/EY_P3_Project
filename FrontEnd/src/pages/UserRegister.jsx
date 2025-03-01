@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const UserRegister = () => {
 
@@ -18,6 +19,7 @@ const UserRegister = () => {
             password: password
         }
 
+        await axios.post("http://localhost:5000/user-register",userdata)
         localStorage.setItem('userdata', JSON.stringify(userdata))
 
         navigate('/user-login')

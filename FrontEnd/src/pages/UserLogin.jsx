@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const UserLogin = () => {
 
@@ -11,18 +12,26 @@ const UserLogin = () => {
     const submitHandler = async (e) => {
         e.preventDefault()
 
-        const userdata = {
-            email: email,
-            password: password
-        }
-
-        var data = JSON.parse(localStorage.getItem('userdata'))
-
-        if (data && data.email === userdata.email && data.password === userdata.password) {
+        try{
+            const res = await axios.post('http://localhost:5000/user-login',{email,password})
+            localStorage.setItem("Username",res.data.username)
             navigate('/user-home')
-        } else {
-            alert('Invalid Email or Password')
+        } catch (error){
+            alert("Invalid Username or Password")
         }
+
+        // const userdata = {
+        //     email: email,
+        //     password: password
+        // }
+
+        // var data = JSON.parse(localStorage.getItem('userdata'))
+
+        // if (data && data.email === userdata.email && data.password === userdata.password) {
+        //     navigate('/user-home')
+        // } else {
+        //     alert('Invalid Email or Password')
+        // }
     }
 
     return (

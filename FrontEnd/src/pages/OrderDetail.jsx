@@ -11,7 +11,7 @@ const OrderDetail = () => {
             <div className="card-body">
                 <h5 className="card-title fs-2">Matar Paneer</h5>
                 <p className="card-text fs-3">Price : 120</p>
-                <p className='card-text fs-4'><span>Hotel Details : </span> ABC Hotel, xyz street, behind PQR Hospital ,MNO nagar, def 413 521</p>
+                {/* <p className='card-text fs-4'><span>Hotel Details : </span> ABC Hotel, xyz street, behind PQR Hospital ,MNO nagar, def 413 521</p> */}
                 <div className='d-flex justify-content-evenly '>
                     <button onClick={()=>{alert('Your order is placed')
                     }} className='fs-3 bg-success text-white rounded rounded-1'>Order food </button>

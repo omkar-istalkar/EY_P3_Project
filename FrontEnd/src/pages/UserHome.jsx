@@ -45,16 +45,8 @@ const UserHome = () => {
           </button>
         </div>
       </div>
-      <div className='row border border-3 border-success m-3 p-2'><h1>Order your favourite food</h1></div>
-      <div className='row p-3'>
-          <div className='col-4'><UserDish/></div>
-          <div className='col-4'><UserDish/></div>
-          <div className='col-4'><UserDish/></div>
-      </div>
-      <div className='row p-3'>
-          <div className='col-4'><UserDish/></div>
-          <div className='col-4'><UserDish/></div>
-          <div className='col-4'><UserDish/></div>
+      <div className="container p-3 m-1">
+        {<UserDish/>}
       </div>
     </div>
   )

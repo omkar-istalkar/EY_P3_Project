@@ -8,7 +8,7 @@ import { useState } from 'react'
 
 const HotelHome = () => {
 
-  const data = JSON.parse(localStorage.getItem('hoteldata'))
+  const data = (localStorage.getItem('hotelName'))
 
   const [showDishes, setShowDishes] = useState(false);
   const [showOrders, setShowOrders] = useState(false);
@@ -35,7 +35,7 @@ const HotelHome = () => {
   return (
     <div className="p-3" style={{height: "100vh", width: "95vw", borderRadius: '10px', margin: 'auto', textAlign: 'center', overflow: 'hidden', padding: '1px'}}>
       <div>
-        <marquee behavior="scroll" direction="left" scrollamount="10"><h4>Welcome to Hotel <span>{data.name}</span> Dashboard! Stay on top of today’s bookings, manage the menu, and track customer orders—all in one place. Let's make today a great service experience!</h4></marquee>
+        <marquee behavior="scroll" direction="left" scrollamount="10"><h4>Welcome to Hotel <span>{data}</span> Dashboard! Stay on top of today’s bookings, manage the menu, and track customer orders—all in one place. Let's make today a great service experience!</h4></marquee>
       </div>
       <div className='row justify-content-md-center mt-3 p-3 bg-light text-dark'>
         <div className="col-3 border border-3 border-dark bg-secondary d-flex flex-column justify-content-evenly p-2 position-sticky top-0" style={{ height: '40vh', position: 'sticky', top: '0' }}>
