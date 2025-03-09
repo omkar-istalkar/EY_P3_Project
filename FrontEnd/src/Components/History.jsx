@@ -1,25 +1,49 @@
-import React from 'react'
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useUser } from "../UserContext";
 
 const History = () => {
-  return (
-    <div className='container p-3 m-1'>
-      <div>
-        <h1 className='fs-1 text-white mb-4'>History of Orders </h1>
-      </div>
-      <div className="card p-3" style={{width: "18rem"}}>
-        <img src="public/Logo.png" className="card-img-top border border-2 m-1" alt="..."/>
-        <div className="card-body">
-          <h5 className="card-title fs-2">Dal Fry</h5>
-          <p className="card-text fs-3">Price : 120</p>
-          <div className='d-flex justify-content-evenly '>
-            <button className='fs-3 bg-success text-white rounded rounded-1'>Confirm</button>
-            <button className='fs-3 bg-danger text-white rounded rounded-3'>Reject</button>
-          </div>
-          <button className='mt-3 rounded rounded-2'>Order Details</button>
-        </div>
-      </div>
-    </div>
-  )
-}
+  const { user } = useUser();
+  const [orders, setOrders] = useState([]);
 
-export default History
+  useEffect(() => {
+    if (user?.email) {
+      fetchOrderHistory(user.email);
+    }
+  }, [user]);
+
+  const fetchOrderHistory = async (email) => {
+    try {
+      const res = await axios.post("http://localhost:5000/order-history", { hotelEmail: email });
+      setOrders(res.data);
+    } catch (error) {
+      console.error("Error fetching order history:", error);
+    }
+  };
+
+  return (
+    <div className="container mt-5">
+      <h2 className="mb-4 text-center text-light">Order History</h2>
+      {orders.length === 0 ? (
+        <div className="alert alert-warning text-center" role="alert">
+          No past orders found.
+        </div>
+      ) : (
+        <div className="list-group" style={{ maxHeight: "540px", overflowY: "auto" }}>
+          {orders.map((order) => (
+            <div key={order._id} className="list-group-item  align-items-center mt-2 rounded border-3 border-warning">
+              <div className="m-1 p-1">
+                <h5 className="mb-1">{order.dishName}</h5>
+                <p className="mb-1">Price: <strong>${order.price}</strong></p>
+                <p className="mb-1">Status: <span className={`badge bg-success`}>{order.status}</span></p>
+                <small>Ordered On: {new Date(order.createdAt).toLocaleDateString()}</small>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default History;

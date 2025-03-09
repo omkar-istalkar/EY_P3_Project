@@ -1,47 +1,72 @@
 import React, { use } from 'react'
 import { useState, useEffect } from 'react'
+import axios from 'axios'
+import {useUser} from "../UserContext"
 
 const HotelInfo = () => {
 
-  var data = JSON.parse(localStorage.getItem('hoteldata'))
-
+  const {user} = useUser();
+  const [hoteldata, sethoteldata] = useState(null)
   const [hname, sethname] = useState('')
   const [hemail, sethemail] = useState('')
   const [hphone, sethphone] = useState('')
   const [haddress, sethaddress] = useState('')
   const [howner, sethowner] = useState('')
+  const [himage, setHimage] = useState('')
 
   useEffect(() => {
   
-    if(data){
-      sethname(data.name)
-      sethemail(data.email)
-      sethowner(data.hname)
-    }
-  
-  }, [])
+   if (user?.email){
+    fetchHotelData(user.email)
+   }
+  }, [user])
 
-  const handleupdate =(e)=>{
+  const fetchHotelData = async (email)=> {
+    try{
+      const res = await axios.get(`http://localhost:5000/hotel-info/${email}`)
+      sethoteldata(res.data);
+      sethname(res.data.h_name);
+      sethemail(res.data.email);
+      sethowner(res.data.owner);
+      sethphone(res.data.phone || " ");
+      sethaddress(res.data.address || " ");
+      setHimage(res.data.himage);
+    }catch(error){
+      console.error("Error fetching hotel data:", error);
+      alert("Failed to fetch hotel information!");
+    }
+  }
+
+  const handleupdate = async(e)=>{
     e.preventDefault();
 
-    var updateData = {
-      name: hname,
-      email: hemail,
-      phone: hphone,
-      address: haddress,
-      owner: howner,
+    const updateData = {
+      h_name : hname,
+      email : hemail,
+      owner : howner,
+      phone : hphone,
+      address : haddress,
+      h_image : himage,
     }
 
-    localStorage.setItem('hoteldata', JSON.stringify(updateData))
+    try{
+      await axios.post(`http://localhost:5000/update-hotel/${user.email}`,updateData)
+      alert("Hotel data updated successfully!")
+    }catch(error){
+      console.error("Error updating hotel data",error)
+      alert("Failed to update data")
+    }
+  }
 
-    alert('Data Updated Successfully')
+  if (!hoteldata){
+    return <h2>Loading hotel information ...</h2>
   }
 
   return (
     <div className='p-3 container bg-light text-dark fluid'>
       <div className='fs-3 text-dark'>Information of Your Hotel</div>
       <div className='mt-3 p-3 border border-3 border-dark rounded rounded-3 text-start'>
-        <div className='mb-2'><img src={data.image} alt="" className='img-fluid m-3'style={{ maxHeight: '200px', objectFit: 'cover', height:'auto'}}/></div>
+        <div className='mb-2'><img src={hoteldata.h_image} alt="HOTEL" className='img-fluid m-3'style={{ maxHeight: '200px', objectFit: 'cover', height:'auto'}}/></div>
         <form>
           <div className='d-flex flex-row m-1 fs-6'> 
             <h3>Hotel Name : </h3>

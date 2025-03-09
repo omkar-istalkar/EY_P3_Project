@@ -1,7 +1,9 @@
 import React,{useState} from 'react'
 import axios from 'axios'
+import { useUser } from '../UserContext';
 
 const AddDish = () => {
+  const {user} = useUser();
   const [dishName, setDishName] = useState('');
   const [dishPrice, setDishPrice] = useState('');
   const [file, setFile] = useState(null);
@@ -22,6 +24,7 @@ const AddDish = () => {
     }
 
     const formData = new FormData();
+    formData.append("hotelEmail", user.email);
     formData.append('name', dishName);
     formData.append('price', dishPrice);
     formData.append('image', file);
@@ -32,7 +35,10 @@ const AddDish = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      alert('Dish added successfully!');
+      alert(res.data.message);
+      setDishName("");
+      setDishPrice("");
+      setFile(null);
     } catch (err) {
       alert('Error adding dish');
     }

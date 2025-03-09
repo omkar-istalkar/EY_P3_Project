@@ -6,6 +6,6 @@ const HotelSchema = new mongoose.Schema({
   password: { type: String, required: true },
   h_name: { type: String, required: true },
   h_image : {type:String,require:true}  
-});
+},{strict : false, timestamps : true});
 
 module.exports = mongoose.model('Hotel', HotelSchema);

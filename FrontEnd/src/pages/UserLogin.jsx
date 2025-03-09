@@ -1,37 +1,30 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import {useUser} from "../UserContext"
 
 const UserLogin = () => {
 
     const [email, setemail] = useState('')
     const [password, setpassword] = useState('')
-
+    const {login} = useUser()
     const navigate = useNavigate()
 
     const submitHandler = async (e) => {
         e.preventDefault()
-
         try{
             const res = await axios.post('http://localhost:5000/user-login',{email,password})
-            localStorage.setItem("Username",res.data.username)
-            navigate('/user-home')
+            if (res.data){
+                login({
+                    email : res.data.user.email,
+                    role : "user"
+                })
+            }
+            navigate("/user-home")
+
         } catch (error){
             alert("Invalid Username or Password")
         }
-
-        // const userdata = {
-        //     email: email,
-        //     password: password
-        // }
-
-        // var data = JSON.parse(localStorage.getItem('userdata'))
-
-        // if (data && data.email === userdata.email && data.password === userdata.password) {
-        //     navigate('/user-home')
-        // } else {
-        //     alert('Invalid Email or Password')
-        // }
     }
 
     return (

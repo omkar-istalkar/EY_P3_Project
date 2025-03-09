@@ -3,13 +3,15 @@ import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import 'remixicon/fonts/remixicon.css'
-import Navbar from './Components/Navbar.jsx'
+import { UserProvider } from './UserContext.jsx'
+
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <Navbar/>
-      <App />
+      <UserProvider>
+        <App />
+      </UserProvider>
     </BrowserRouter>
   </StrictMode>,
 )

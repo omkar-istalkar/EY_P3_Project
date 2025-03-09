@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import {useUser} from "../UserContext"
 
 const HotelLogin = () => {
 
     const [email, setemail] = useState('')
     const [password, setpassword] = useState('')
-
+    const {login} = useUser()
     const navigate = useNavigate()
 
     const submitHandler = async (e) => {
@@ -15,25 +16,14 @@ const HotelLogin = () => {
         try{
             const res = await axios.post('http://localhost:5000/hotel-login',{email,password})
             if (res.data && res.data.hotel) {
-                localStorage.setItem('hotelEmail', res.data.hotel.email);
-                localStorage.setItem('hotelName', res.data.hotel.name);
+                login({
+                    email:res.data.hotel.email,
+                    role:'hotel'
+                })
                 navigate('/hotel-home')}
         }catch(error){
             alert('Invalid Username or Password')
         }
-
-        // const data = {
-        //     email: email,
-        //     password: password
-        // }
-
-        // var hdata = JSON.parse(localStorage.getItem('hoteldata'))
-
-        // if (hdata && hdata.email === data.email && hdata.password === data.password) {
-        //     navigate('/hotel-home')
-        // } else {
-        //     alert('Invalid Email or Password')
-        // }
     }
 
     return (
